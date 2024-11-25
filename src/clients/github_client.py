@@ -156,3 +156,23 @@ class GithubClient:
         except requests.RequestException as e:
             logging.error("Error retrieving patch for PR ID %s: %s", pr_id, e)
             raise
+
+    def is_reviewer_assigned(self, pr_id, reviewer_name):
+        """
+        Check if the given reviewer is assigned to the pull request.
+            
+        Args:
+            pr_id (int): The pull request ID.
+            reviewer_name (str): The reviewer's username to check.
+
+        Returns:
+            bool: True if a reviewer is assigned, False otherwise.
+        """
+        try:
+            pr = self.get_pr(pr_id)
+            reviewers = [r.login for r in pr.get_review_requests()[0]]  # Get user reviewers
+            logging.info("Reviewers for PR ID %s: %s", pr_id, reviewers)
+            return reviewer_name in reviewers
+        except requests.RequestException as e:
+            logging.error("Error checking for reviewers for PR ID %s: %s", pr_id, e)
+            return False
