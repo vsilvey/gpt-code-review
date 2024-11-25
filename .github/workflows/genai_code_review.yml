@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: GenAI Code Review
+      - name: GPT Code Review
         uses: vsilvey/gpt-code-review@v2
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
