@@ -1,6 +1,6 @@
 """
-Este módulo contém a classe OpenAIClient, que é usada para interagir com a API do OpenAI.
-A classe OpenAIClient pode ser usada para gerar respostas de um modelo especificado do OpenAI.
+This module contains the OpenAIClient class, which is used to interact with the OpenAI API. 
+The OpenAIClient class can be used to generate responses from a specified OpenAI model.
 """
 
 import logging
