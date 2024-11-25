@@ -1,5 +1,5 @@
 """
-Main module for handling the code review process using ChatGPT and GitHub API.
+Main module for handling the code review process using ChatGPT and GitHub's API.
 """
 
 import logging
@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 def main():
     """
-    Main function to handle the code review process based on the mode specified.
+    Main function to handle the code review process based on the reviewer assigned and the mode specified.
     """
     try:
         env_vars = get_env_vars()
@@ -25,24 +25,21 @@ def main():
                                  env_vars['OPENAI_TEMPERATURE'],
                                  env_vars['OPENAI_MAX_TOKENS'])
 
-    language = env_vars.get('LANGUAGE', 'en')
-    custom_prompt = env_vars.get('CUSTOM_PROMPT')
-
-    if env_vars['MODE'] == "files":
-        process_files(github_client,
-                      openai_client,
-                      env_vars['GITHUB_PR_ID'],
-                      language,
-                      custom_prompt)
-    elif env_vars['MODE'] == "patch":
-        process_patch(github_client,
-                      openai_client,
-                      env_vars['GITHUB_PR_ID'],
-                      language,
-                      custom_prompt)
+    pr_id = env_vars['GITHUB_PR_ID']
+    reviewer = env_vars.get('GITHUB_REVIEWER', '').strip()
+    
+    if reviewer.lower() == "gpt reviewer" and github_client.is_reviewer_assigned(pr_id, reviewer):
+        logging.info("Reviewer 'gpt reviewer' assigned. Starting code review.")
+        language = env_vars.get('LANGUAGE', 'en')
+        custom_prompt = env_vars.get('CUSTOM_PROMPT')
+        if env_vars['MODE'] == "files":
+            process_files(github_client, openai_client, pr_id, language, custom_prompt)
+        elif env_vars['MODE'] == "patch":
+            process_patch(github_client, openai_client, pr_id, language, custom_prompt)
+        else:
+            logging.error("Invalid mode. Choose either 'files' or 'patch'.")
     else:
-        logging.error("Invalid mode. Choose either 'files' or 'patch'.")
-        raise ValueError("Invalid mode. Choose either 'files' or 'patch'.")
+        logging.info("No action taken. Reviewer is not 'chatgpt reviewer'.")
 
 def get_env_vars():
     """
