@@ -13,6 +13,10 @@ inputs:
     description: 'Github PR ID'
     required: true
     default: ''
+  github_reviewer: 
+    description: 'PR reviewer that was requested'
+    required: true
+    default: ''
   openai_model:
     description: "The OpenAI model to use for generating responses. Examples: 'gpt-3.5-turbo', 'gpt-4'"
     required: false
@@ -44,6 +48,7 @@ runs:
     OPENAI_API_KEY: ${{ inputs.openai_api_key }}
     GITHUB_TOKEN: ${{ inputs.github_token }}
     GITHUB_PR_ID: ${{ inputs.github_pr_id }}
+    GITHUB_REVIEWER: ${{inputs.github_reviewer}}
     OPENAI_MODEL: ${{ inputs.openai_model }}
     OPENAI_TEMPERATURE: ${{ inputs.openai_temperature }}
     OPENAI_MAX_TOKENS: ${{ inputs.openai_max_tokens }}
