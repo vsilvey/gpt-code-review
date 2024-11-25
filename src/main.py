@@ -56,6 +56,7 @@ def get_env_vars():
         'OPENAI_API_KEY': (str, True),
         'GITHUB_TOKEN': (str, True),
         'GITHUB_PR_ID': (int, True),
+        'GITHUB_REVIEWER': (str, True),
         'OPENAI_MODEL': (str, True),
         'OPENAI_TEMPERATURE': (float, True),
         'OPENAI_MAX_TOKENS': (int, True),
