@@ -1,7 +1,6 @@
 """
-Este módulo contém a classe GithubClient, que é usada para interagir com a API do Github.
-A classe GithubClient pode ser usada para recuperar informações sobre commits, conteúdo de 
-arquivos e patches de pull requests.
+This module contains the GithubClient class, which is used to interact with the Github API. 
+The GithubClient class can be used to retrieve information about users, commits, content of pull requests files and patches.
 """
 
 import os
