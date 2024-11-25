@@ -1,7 +1,5 @@
 """
-Este módulo contém funções auxiliares para o projeto.
-Este módulo fornece uma função para recuperar variáveis de ambiente e garantir que elas não 
-estejam vazias, se necessário.
+This module's function is to retrieve environment variables and ensure that they are not empty as applicable.
 """
 
 import os
