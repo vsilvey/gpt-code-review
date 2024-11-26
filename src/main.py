@@ -20,7 +20,7 @@ def main():
         logging.error("Environment variable error: %s", e)
         return
 
-    github_client = GithubClient(env_vars['GITHUB_TOKEN'])
+    github_client = GithubClient(env_vars['GH_TOKEN'])
     openai_client = OpenAIClient(env_vars['OPENAI_MODEL'],
                                  env_vars['OPENAI_TEMPERATURE'],
                                  env_vars['OPENAI_MAX_TOKENS'])
@@ -54,7 +54,7 @@ def get_env_vars():
     """
     variables = {
         'OPENAI_API_KEY': (str, True),
-        'GITHUB_TOKEN': (str, True),
+        'GH_TOKEN': (str, True),
         'GITHUB_PR_ID': (int, True),
         'GITHUB_REVIEWER': (str, True),
         'OPENAI_MODEL': (str, True),
