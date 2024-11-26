@@ -145,7 +145,7 @@ class GithubClient:
         try:
             url = f"https://api.github.com/repos/{self.repo_name}/pulls/{pr_id}"
             headers = {
-                'Authorization': f"token {os.getenv('GITHUB_TOKEN')}",
+                'Authorization': f"token {os.getenv('GH_TOKEN')}",
                 'Accept': 'application/vnd.github.v3.diff'
             }
             response = requests.get(url, headers=headers, timeout=60)
