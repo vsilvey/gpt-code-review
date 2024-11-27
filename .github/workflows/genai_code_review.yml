@@ -1,6 +1,6 @@
 on:
   pull_request:
-    types: [review_requested]
+    types: [review-requested]
 
 jobs:
   genai_code_review:
