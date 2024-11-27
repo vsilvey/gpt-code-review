@@ -8,9 +8,9 @@ jobs:
     name: GPT Code Review
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout
       - name: GPT Code Review
-        uses: vsilvey/gpt-code-review@v2
+        uses: vsilvey/gpt-code-review
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           github_token: ${{ secrets.GH_TOKEN }}
