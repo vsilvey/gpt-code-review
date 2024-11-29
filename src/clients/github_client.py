@@ -25,6 +25,7 @@ class GithubClient:
             token (str): The GitHub token for authentication.
         """
         try:
+            print('token is:' self.token)
             self.client = Github(token)
             self.repo_name = os.getenv('GITHUB_REPOSITORY')
             self.repo = self.client.get_repo(self.repo_name)
