@@ -25,8 +25,8 @@ class GithubClient:
             token (str): The GitHub token for authentication.
         """
         try:
-            logging.info("Github token is: %s", token)
             self.client = Github(token)
+            logging.info("Github repository is: %s", os.getenv('GITHUB_REPOSITORY'))
             self.repo_name = os.getenv('GITHUB_REPOSITORY')
             self.repo = self.client.get_repo(self.repo_name)
             logging.info("Initialized GitHub client for repository: %s", self.repo_name)
