@@ -15,8 +15,8 @@ inputs:
     default: ''
   github_reviewer: 
     description: 'PR reviewer that was requested'
-    required: true
-    default: 'gpt reviewer'
+    required: false
+    default: "gpt reviewer"
   openai_model:
     description: "The OpenAI model to use for generating responses. Examples: 'gpt-3.5-turbo', 'gpt-4'"
     required: false
