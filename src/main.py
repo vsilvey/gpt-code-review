@@ -27,7 +27,8 @@ def main():
 
     pr_id = env_vars['GITHUB_PR_ID']
     reviewer = env_vars.get('GITHUB_REVIEWER', '').strip()
-    
+
+    logging.info("reviewer is", reviewer)
     if reviewer.lower() == "gpt reviewer" and github_client.is_reviewer_assigned(pr_id, reviewer):
         logging.info("Reviewer 'gpt reviewer' assigned. Starting code review.")
         language = env_vars.get('LANGUAGE', 'en')
