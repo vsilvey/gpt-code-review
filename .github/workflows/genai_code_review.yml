@@ -6,17 +6,15 @@ jobs:
   genai_code_review:
     runs-on: ubuntu-latest
     name: GPT Code Review
-    if: ${{ github.event.requested_reviewer.login == 'sonargptreviewer' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
-
       - name: GPT Code Review Testing
         uses: vsilvey/gpt-code-review@master
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           github_token: ${{ secrets.GH_TOKEN }}
-          github_pr_id: ${{ github.event.pull_request.number }}
+          github_pr_id: 1
           github_reviewer: 'sonargptreviewer'
           openai_model: 'gpt-4o'
           openai_temperature: 0.5
@@ -24,13 +22,3 @@ jobs:
           mode: patch # files or patch
           language: en # optional, default is 'en'
           custom_prompt: "" # optional
-
-  debug_reviewer:
-    runs-on: ubuntu-latest
-    name: Debug Reviewer Assignment
-    if: ${{ github.event.requested_reviewer.login != 'sonargptreviewer' }}
-    steps:
-      - name: Log Reviewer Details
-        run: |
-          echo "Reviewer assigned: ${{ github.event.requested_reviewer.login }}"
-          echo "This reviewer is not 'sonargptreviewer'. Skipping GPT Code Review."
