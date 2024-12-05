@@ -166,7 +166,7 @@ class GithubClient:
             reviewer_name (str): The reviewer's username to check.
 
         Returns:
-            bool: True if a reviewer is assigned, False otherwise.
+            bool: True if the reviewer passed in reviewer_name is assigned, False otherwise.
         """
         try:
             pr = self.get_pr(pr_id)
