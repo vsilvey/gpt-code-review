@@ -176,3 +176,36 @@ class GithubClient:
         except requests.RequestException as e:
             logging.error("Error checking for reviewers for PR ID %s: %s", pr_id, e)
             return False
+
+
+def get_most_recent_reviewer(pr_id):
+    """
+    Fetches the most recently assigned reviewer for a specific pull request.
+
+    Args:
+        pr_id (int): The pull request number.
+
+    Returns:
+        str: The username of the most recently assigned reviewer, or None if no reviewer was assigned.
+    """
+    url = f"https://api.github.com/repos/{self.repo_name}/issues/{pr_id}/timeline"
+    headers = {
+        'Authorization': f"token {os.getenv('GH_TOKEN')}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code != 200:
+        print(f"Failed to fetch timeline events: {response.status_code} - {response.text}")
+        return None
+
+    events = response.json()
+
+    # Find the most recent "review_requested" event
+    for event in reversed(events):
+        if event.get("event") == "review_requested" and event.get("requested_reviewer"):
+            return event["requested_reviewer"]["login"]
+
+    print("No reviewer assignment found.")
+    return None
