@@ -28,8 +28,8 @@ def main():
     pr_id = env_vars['GITHUB_PR_ID']
     reviewer = env_vars.get('GITHUB_REVIEWER', '').strip()
 
-    if reviewer.lower() == "sonargptreviewer" and github_client.is_reviewer_assigned(pr_id, reviewer):
-        logging.info("Reviewer 'sonargptreviewer' assigned. Starting code review.")
+    if  get_most_recent_reviewer(pr_id) == reviewer:
+        logging.info(f"Reviewer {reviewer} assigned. Starting code review.")
         language = env_vars.get('LANGUAGE', 'en')
         custom_prompt = env_vars.get('CUSTOM_PROMPT')
         if env_vars['MODE'] == "files":
@@ -39,7 +39,7 @@ def main():
         else:
             logging.error("Invalid mode. Choose either 'files' or 'patch'.")
     else:
-        logging.info("No action taken. Reviewer is not 'sonargptreviewer'.")
+        logging.info(f"No action taken. Reviewer is not {reviewer}.")
 
 def get_env_vars():
     """
