@@ -157,7 +157,7 @@ class GithubClient:
             logging.error("Error retrieving patch for PR ID %s: %s", pr_id, e)
             raise
 
-    def get_most_recent_reviewer(self, owner, pr_id):
+    def get_most_recent_reviewer(self, pr_id):
         """
         Fetches the most recently assigned reviewer for a specific pull request,
         iterating through all paginated results and filtering by 'review_requested' event type.
