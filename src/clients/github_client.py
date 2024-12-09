@@ -196,7 +196,6 @@ class GithubClient:
             response = requests.get(url, headers=headers, timeout=60)
             response.raise_for_status()
             logging.info("Retrieved timeline for PR ID: %s", pr_id)
-            return response.text
         except requests.RequestException as e:
             logging.error("Error retrieving timeline for PR ID %s: %s", pr_id, e)
             raise
