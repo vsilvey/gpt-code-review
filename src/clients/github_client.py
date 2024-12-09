@@ -206,6 +206,7 @@ class GithubClient:
         # Find the most recent "review_requested" event
         for event in reversed(events):
             if event.get("event") == "review_requested" and event.get("requested_reviewer"):
+                logging.info("Most recent reviewer requested is: %s", event["login"])
                 return event["requested_reviewer"]["login"]
             logging.info("No reviewer assignment found for PR ID: %s", pr_id)
         return None
