@@ -177,8 +177,9 @@ class GithubClient:
             filtered_events = []
             page = 1
 
-            # Paginate through all results while filtering for 'review_requested' events. Append all 'review_requested'
-            # events to filtered_events as they are found.
+            # Paginate through all /timeline results while filtering for 'review_requested' events.
+            # Append all 'review_requested' events to filtered_events as they are found.
+            # Note: api rate limit for authenticated requests is 5,000 requests/hr/user
             while True:
                 url = f"{base_url}?page={page}&per_page=100"
                 response = requests.get(url, headers=headers, timeout=60)
