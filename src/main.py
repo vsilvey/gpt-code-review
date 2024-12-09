@@ -31,7 +31,7 @@ def main():
 # Check to see if the most recent reviewer assigned is the reviewer retrieved from the env vars. If so, proceed with
 # the code review.
     if  github_client.get_most_recent_reviewer(pr_id) == reviewer:
-        logging.info("Reviewer {reviewer} assigned. Starting code review.", reviewer)
+        logging.info("Reviewer %s assigned. Starting code review.", reviewer)
         language = env_vars.get('LANGUAGE', 'en')
         custom_prompt = env_vars.get('CUSTOM_PROMPT')
         if env_vars['MODE'] == "files":
