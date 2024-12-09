@@ -157,56 +157,76 @@ class GithubClient:
             logging.error("Error retrieving patch for PR ID %s: %s", pr_id, e)
             raise
 
-    def get_most_recent_reviewer(self, pr_id):
+    def get_most_recent_reviewer(self, owner, pr_id):
         """
         Fetches the most recently assigned reviewer for a specific pull request,
         iterating through all paginated results and filtering by 'review_requested' event type.
 
         Args:
+            owner (str): The pull request owner.
             pr_id (int): The pull request number.
 
         Returns:
             str: The username of the most recently assigned reviewer, or None if no reviewer was assigned.
         """
-        try:
-            base_url = f"https://api.github.com/repos/{self.repo_name}/issues/{pr_id}/timeline"
-            headers = {
-                'Authorization': f"token {os.getenv('GH_TOKEN')}",
-                "Accept": "application/vnd.github.v3+json"
+        url = "https://api.github.com/graphql"
+        headers = {
+            'Authorization': f"token {os.getenv('GH_TOKEN')}",
+            "Content-Type": "application/json"
+        }
+        query = """
+        query($owner: String!, $repo: String!, $pullNumber: Int!) {
+          repository(owner: $owner, name: $repo) {
+            pullRequest(number: $pullNumber) {
+              reviews(last: 1) {
+                nodes {
+                  author {
+                    login
+                  }
+                  createdAt
+                }
+              }
             }
-            filtered_events = []
-            page = 1
+          }
+        }
+        """
+        variables = {
+            "owner": owner,
+            "repo": self.repo,
+            "pullNumber": pr_id
+        }
 
-            # Paginate through all /timeline results while filtering for 'review_requested' events.
-            # Append all 'review_requested' events to filtered_events as they are found.
-            # Note: api rate limit for authenticated requests is 5,000 requests/hr/user
-            while True:
-                url = f"{base_url}?page={page}&per_page=100"
-                response = requests.get(url, headers=headers, timeout=60)
-                response.raise_for_status()
-                events = response.json()
+        response = requests.post(url, json={"query": query, "variables": variables}, headers=headers)
 
-                if not events:
-                    break  # Exit the loop if no more events are returned
+        if response.status_code != 200:
+            raise Exception(f"GraphQL query failed with status code {response.status_code}: {response.text}")
 
-                # Filter for "review_requested" events during pagination
-                for event in events:
-                    if event.get("event") == "review_requested" and event.get("requested_reviewer"):
-                        filtered_events.append(event)
+        data = response.json()
+        try:
+            reviews = data["data"]["repository"]["pullRequest"]["reviews"]["nodes"]
+            if reviews:
+                most_recent_reviewer = reviews[0]["author"]["login"]
+                return most_recent_reviewer
+            else:
+                return None
+        except (KeyError, TypeError):
+            raise Exception("Unexpected response format or missing data: ", response.json())
 
-                page += 1  # Move to the next page
+    def get_pr_owner(self, pr_id):
+        """
+        Retrieve the owner (creator) of a pull request.
 
-            logging.info("Retrieved %d 'review_requested' events for PR ID: %s", len(filtered_events), pr_id)
+        Args:
+            pr_id (int): The pull request ID.
 
-        except requests.RequestException as e:
-            logging.error("Error retrieving timeline for PR ID %s: %s", pr_id, e)
+        Returns:
+            str: The username of the pull request owner.
+        """
+        try:
+            pr = self.get_pr(pr_id)
+            owner = pr.user.login
+            logging.info("PR ID: %s is owned by: %s", pr_id, owner)
+            return owner
+        except Exception as e:
+            logging.error("Error retrieving owner for PR ID %s: %s", pr_id, e)
             raise
-
-        # Find the most recent "requested_reviewer" event from filtered timeline events
-        for event in reversed(filtered_events):
-            reviewer_login = event["requested_reviewer"]["login"]
-            logging.info("Most recent reviewer requested is: %s", reviewer_login)
-            return reviewer_login
-
-        logging.info("No reviewer assignment found for PR ID: %s", pr_id)
-        return None
