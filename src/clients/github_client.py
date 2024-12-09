@@ -175,8 +175,8 @@ class GithubClient:
             "Content-Type": "application/json"
         }
         query = """
-        query($repository: String!, $pullNumber: Int!) {
-          repository(owner: $repository.split('/')[0], name: $repository.split('/')[1]) {
+        query($owner: String!, $repo: String! $pullNumber: Int!) {
+          repository(owner: $owner, name: $repo) {
             pullRequest(number: $pullNumber) {
               reviews(last: 1) {
                 nodes {
@@ -191,7 +191,8 @@ class GithubClient:
         }
         """
         variables = {
-            "repository": self.repo_name,
+            "owner": self.repo_name.split('/')[0],
+            "repo": self.repo_name.split('/')[1],
             "pullNumber": pr_id
         }
 
