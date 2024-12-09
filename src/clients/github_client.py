@@ -192,7 +192,7 @@ class GithubClient:
         """
         variables = {
             "owner": owner,
-            "repo": self.repo,
+            "repo": self.repo_name,
             "pullNumber": pr_id
         }
 
