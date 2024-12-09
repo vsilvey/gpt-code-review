@@ -28,8 +28,7 @@ def main():
     pr_id = env_vars['GITHUB_PR_ID']
     reviewer = env_vars.get('GITHUB_REVIEWER', '').strip()
 
-# Check to see if the most recent reviewer assigned is the reviewer retrieved from the env vars. If so, proceed with
-# the code review.
+# Proceed with code review if reviewer matches most recently requested reviewer.
     if  github_client.get_most_recent_reviewer(pr_id) == reviewer:
         logging.info("Reviewer %s assigned. Starting code review.", reviewer)
         language = env_vars.get('LANGUAGE', 'en')
@@ -41,7 +40,7 @@ def main():
         else:
             logging.error("Invalid mode. Choose either 'files' or 'patch'.")
     else:
-        logging.info(f"No action taken. Reviewer is not {reviewer}.")
+        logging.info("No action taken. Reviewer is not %s.", reviewer)
 
 def get_env_vars():
     """
