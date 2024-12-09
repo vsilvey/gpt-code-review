@@ -208,9 +208,9 @@ class GithubClient:
         data = response.json()
         logging.info("The content of the response is %s", data)
         try:
-            reviews = data["data"]["repository"]["pullRequest"]["reviews"]["nodes"]
+            reviews = data["data"]["repository"]["pullRequest"]["reviewRequests"]["nodes"]["requestedReviewer"]["login"]
             if reviews:
-                most_recent_reviewer = reviews[0]["author"]["login"]
+                most_recent_reviewer = reviews[0]["login"]
                 return most_recent_reviewer
             else:
                 return None
