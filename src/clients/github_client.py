@@ -202,7 +202,7 @@ class GithubClient:
             logging.error("Error retrieving timeline for PR ID %s: %s", pr_id, e)
             raise
 
-        # Find the most recent "review_requested" event from filtered events
+        # Find the most recent "requested_reviewer" event from filtered events
         for event in reversed(filtered_events):
             reviewer_login = event["requested_reviewer"]["login"]
             logging.info("Most recent reviewer requested is: %s", reviewer_login)
