@@ -180,7 +180,7 @@ class GithubClient:
     def get_most_recent_reviewer(self, pr_id):
         """
         Fetches the most recently assigned reviewer for a specific pull request,
-        iterating through all paginated results.
+        iterating through all paginated results and filtering by 'review_requested' event type.
 
         Args:
             pr_id (int): The pull request number.
@@ -194,7 +194,7 @@ class GithubClient:
                 'Authorization': f"token {os.getenv('GH_TOKEN')}",
                 "Accept": "application/vnd.github.v3+json"
             }
-            all_events = []
+            filtered_events = []
             page = 1
 
             # Paginate through all results
@@ -207,21 +207,24 @@ class GithubClient:
                 if not events:
                     break  # Exit the loop if no more events are returned
 
-                all_events.extend(events)
+                # Filter for "review_requested" events during pagination
+                for event in events:
+                    if event.get("event") == "review_requested" and event.get("requested_reviewer"):
+                        filtered_events.append(event)
+
                 page += 1  # Move to the next page
 
-            logging.info("Retrieved %d events for PR ID: %s", len(all_events), pr_id)
+            logging.info("Retrieved %d 'review_requested' events for PR ID: %s", len(filtered_events), pr_id)
 
         except requests.RequestException as e:
             logging.error("Error retrieving timeline for PR ID %s: %s", pr_id, e)
             raise
 
-        # Find the most recent "review_requested" event
-        for event in reversed(all_events):
-            if event.get("event") == "review_requested" and event.get("requested_reviewer"):
-                reviewer_login = event["requested_reviewer"]["login"]
-                logging.info("Most recent reviewer requested is: %s", reviewer_login)
-                return reviewer_login
+        # Find the most recent "review_requested" event from filtered events
+        for event in reversed(filtered_events):
+            reviewer_login = event["requested_reviewer"]["login"]
+            logging.info("Most recent reviewer requested is: %s", reviewer_login)
+            return reviewer_login
 
         logging.info("No reviewer assignment found for PR ID: %s", pr_id)
         return None
