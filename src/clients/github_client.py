@@ -175,15 +175,19 @@ class GithubClient:
             "Content-Type": "application/json"
         }
         query = """
-        query($owner: String!, $repo: String! $pullNumber: Int!) {
+        query ($owner: String!, $repo: String!, $pullNumber: Int!) {
           repository(owner: $owner, name: $repo) {
             pullRequest(number: $pullNumber) {
-              reviews(last: 1) {
+              reviewRequests(last: 1) {
                 nodes {
-                  author {
-                    login 
+                  requestedReviewer {
+                    ... on User {
+                      login
+                    }
+                    ... on Team {
+                      name
+                    }
                   }
-                  createdAt
                 }
               }
             }
@@ -195,8 +199,7 @@ class GithubClient:
             "repo": self.repo_name.split('/')[1],
             "pullNumber": pr_id
         }
-        logging.info(f"owner is {self.repo_name.split('/')[0]}")
-        logging.info(f"repo is {self.repo_name.split('/')[1]}")
+
         response = requests.post(url, json={"query": query, "variables": variables}, headers=headers)
 
         if response.status_code != 200:
