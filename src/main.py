@@ -40,7 +40,7 @@ def main():
         else:
             logging.error("Invalid mode. Choose either 'files' or 'patch'.")
     else:
-        logging.info("No action taken. Reviewer is not %s.", reviewer)
+        logging.warning("No action taken. Reviewer is not %s.", reviewer)
 
 def get_env_vars():
     """
