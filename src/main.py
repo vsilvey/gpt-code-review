@@ -31,7 +31,7 @@ def main():
 # Check to see if the most recent reviewer assigned is the reviewer retrieved from the env vars. If so, proceed with
 # the code review.
     if  github_client.get_most_recent_reviewer(pr_id) == reviewer:
-        logging.info(f"Reviewer {reviewer} assigned. Starting code review.")
+        logging.info("Reviewer {reviewer} assigned. Starting code review.", reviewer)
         language = env_vars.get('LANGUAGE', 'en')
         custom_prompt = env_vars.get('CUSTOM_PROMPT')
         if env_vars['MODE'] == "files":
@@ -206,7 +206,7 @@ def create_review_prompt(content, language, custom_prompt=None):
             f"Write this code review in the following {language}:\n\n"
         )
     return (
-        f"You are now an expert code reviewer. Please review the following code for clarity, efficiency, and adherence to best practices."
+        f"You are now an expert code reviewer. Please review the following code for clarity, efficiency, and adherence to best practices. "
         f"Identify any areas for improvement, suggest specific optimizations, and note potential bugs or security vulnerabilities. "
         f"Additionally, provide suggestions for how to address the identified issues, with a focus on maintainability and scalability. "
         f"Include examples of code where relevant. Use markdown formatting for your response:\n\n"
@@ -232,7 +232,7 @@ def create_review_prompt(content, language, custom_prompt=None):
         f"   **Suggestion**: Use parameterized queries to prevent SQL injection. For example:\n"
         f"   ```python\n"
         f"   # Instead of this:\n"
-        f"   cursor.execute(f'SELECT * FROM users WHERE username = (username)')\n"
+        f"   cursor.execute('SELECT * FROM users WHERE username = (username)')\n"
         f"   # Use this:\n"
         f"   cursor.execute('SELECT * FROM users WHERE username = %s', (username,))\n"
         f"   ```"
