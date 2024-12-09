@@ -28,6 +28,8 @@ def main():
     pr_id = env_vars['GITHUB_PR_ID']
     reviewer = env_vars.get('GITHUB_REVIEWER', '').strip()
 
+# Check to see if the most recent reviewer assigned is the reviewer retrieved from the env vars. If so, proceed with
+# the code review.
     if  github_client.get_most_recent_reviewer(pr_id) == reviewer:
         logging.info(f"Reviewer {reviewer} assigned. Starting code review.")
         language = env_vars.get('LANGUAGE', 'en')
@@ -204,7 +206,7 @@ def create_review_prompt(content, language, custom_prompt=None):
             f"Write this code review in the following {language}:\n\n"
         )
     return (
-        f"Please review the following code for clarity, efficiency, and adherence to best practices."
+        f"You are now an expert code reviewer. Please review the following code for clarity, efficiency, and adherence to best practices."
         f"Identify any areas for improvement, suggest specific optimizations, and note potential bugs or security vulnerabilities. "
         f"Additionally, provide suggestions for how to address the identified issues, with a focus on maintainability and scalability. "
         f"Include examples of code where relevant. Use markdown formatting for your response:\n\n"
