@@ -203,7 +203,7 @@ class GithubClient:
         events = response.json()
 
         # Find the most recent "review_requested" event
-        for event in events:
+        for event in reversed(events):
             if event.get("event") == "review_requested" and event.get("requested_reviewer"):
                 logging.info("Most recent reviewer requested is: %s", event.get("requested_reviewer"))
                 return event["requested_reviewer"]["login"]
