@@ -157,26 +157,6 @@ class GithubClient:
             logging.error("Error retrieving patch for PR ID %s: %s", pr_id, e)
             raise
 
-    def is_reviewer_assigned(self, pr_id, reviewer_name):
-        """
-        Check if the given reviewer is assigned to the pull request.
-            
-        Args:
-            pr_id (int): The pull request ID.
-            reviewer_name (str): The reviewer's username to check.
-
-        Returns:
-            bool: True if the reviewer passed in reviewer_name is assigned, False otherwise.
-        """
-        try:
-            pr = self.get_pr(pr_id)
-            reviewers = [r.login for r in pr.get_review_requests()[0]]  # Get user reviewers
-            logging.info("Reviewers for PR ID %s: %s", pr_id, reviewers)
-            return reviewer_name in reviewers
-        except requests.RequestException as e:
-            logging.error("Error checking for reviewers for PR ID %s: %s", pr_id, e)
-            return False
-
     def get_most_recent_reviewer(self, pr_id):
         """
         Fetches the most recently assigned reviewer for a specific pull request,
@@ -197,7 +177,8 @@ class GithubClient:
             filtered_events = []
             page = 1
 
-            # Paginate through all results
+            # Paginate through all results while filtering for 'review_requested' events. Append all 'review_requested'
+            # events to filtered_events as they are found.
             while True:
                 url = f"{base_url}?page={page}&per_page=100"
                 response = requests.get(url, headers=headers, timeout=60)
