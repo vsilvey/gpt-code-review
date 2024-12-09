@@ -30,7 +30,7 @@ def main():
 
 # Proceed with code review if reviewer matches most recently requested reviewer.
 
-    if  github_client.get_most_recent_reviewer(owner, pr_id) == reviewer:
+    if  github_client.get_most_recent_reviewer(pr_id) == reviewer:
         logging.info("Reviewer %s assigned. Starting code review.", reviewer)
         language = env_vars.get('LANGUAGE', 'en')
         custom_prompt = env_vars.get('CUSTOM_PROMPT')
