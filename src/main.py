@@ -28,7 +28,7 @@ def main():
     pr_id = env_vars['GITHUB_PR_ID']
     reviewer = env_vars.get('GITHUB_REVIEWER', '').strip()
 
-    if  get_most_recent_reviewer(pr_id) == reviewer:
+    if  github_client.get_most_recent_reviewer(pr_id) == reviewer:
         logging.info(f"Reviewer {reviewer} assigned. Starting code review.")
         language = env_vars.get('LANGUAGE', 'en')
         custom_prompt = env_vars.get('CUSTOM_PROMPT')
