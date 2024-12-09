@@ -181,7 +181,7 @@ class GithubClient:
               reviews(last: 1) {
                 nodes {
                   author {
-                    login
+                    login 
                   }
                   createdAt
                 }
