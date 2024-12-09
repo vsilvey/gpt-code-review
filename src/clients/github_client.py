@@ -201,6 +201,7 @@ class GithubClient:
             raise Exception(f"GraphQL query failed with status code {response.status_code}: {response.text}")
 
         data = response.json()
+        logging.info("The content of the response is %s", data)
         try:
             reviews = data["data"]["repository"]["pullRequest"]["reviews"]["nodes"]
             if reviews:
