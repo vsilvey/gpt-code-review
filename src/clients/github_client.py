@@ -179,7 +179,8 @@ class GithubClient:
 
     def get_most_recent_reviewer(self, pr_id):
         """
-        Fetches the most recently assigned reviewer for a specific pull request.
+        Fetches the most recently assigned reviewer for a specific pull request,
+        iterating through all paginated results.
 
         Args:
             pr_id (int): The pull request number.
@@ -188,24 +189,39 @@ class GithubClient:
             str: The username of the most recently assigned reviewer, or None if no reviewer was assigned.
         """
         try:
-            url = f"https://api.github.com/repos/{self.repo_name}/issues/{pr_id}/timeline"
+            base_url = f"https://api.github.com/repos/{self.repo_name}/issues/{pr_id}/timeline"
             headers = {
-               'Authorization': f"token {os.getenv('GH_TOKEN')}",
-               "Accept": "application/vnd.github.v3+json"
+                'Authorization': f"token {os.getenv('GH_TOKEN')}",
+                "Accept": "application/vnd.github.v3+json"
             }
-            response = requests.get(url, headers=headers, timeout=60)
-            response.raise_for_status()
-            logging.info("Retrieved timeline for PR ID: %s", pr_id)
+            all_events = []
+            page = 1
+
+            # Paginate through all results
+            while True:
+                url = f"{base_url}?page={page}&per_page=100"
+                response = requests.get(url, headers=headers, timeout=60)
+                response.raise_for_status()
+                events = response.json()
+
+                if not events:
+                    break  # Exit the loop if no more events are returned
+
+                all_events.extend(events)
+                page += 1  # Move to the next page
+
+            logging.info("Retrieved %d events for PR ID: %s", len(all_events), pr_id)
+
         except requests.RequestException as e:
             logging.error("Error retrieving timeline for PR ID %s: %s", pr_id, e)
             raise
 
-        events = response.json()
-
         # Find the most recent "review_requested" event
-        for event in reversed(events):
+        for event in reversed(all_events):
             if event.get("event") == "review_requested" and event.get("requested_reviewer"):
-                logging.info("Most recent reviewer requested is: %s", event.get("requested_reviewer"))
-                return event["requested_reviewer"]["login"]
-            logging.info("No reviewer assignment found for PR ID: %s", pr_id)
+                reviewer_login = event["requested_reviewer"]["login"]
+                logging.info("Most recent reviewer requested is: %s", reviewer_login)
+                return reviewer_login
+
+        logging.info("No reviewer assignment found for PR ID: %s", pr_id)
         return None
