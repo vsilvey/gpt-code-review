@@ -5,7 +5,7 @@ The GithubClient class can be used to retrieve information about users, commits,
 
 import os
 import logging
-import requests
+# import requests
 from github import Github
 
 
@@ -220,7 +220,7 @@ class GithubClient:
                     return requested_reviewer["name"]  # Team's name
             return None
         except Exception as e:
-            logging.error("Unexpected response format or missing data: %s", response.json(), e)
+            logging.error("Unexpected response format or missing data: investigate response content")
             raise
 
     def get_pr_owner(self, pr_id):
