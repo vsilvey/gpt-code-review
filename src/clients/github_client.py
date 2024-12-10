@@ -208,12 +208,16 @@ class GithubClient:
         data = response.json()
         logging.info("The content of the response is %s", data)
         try:
-            reviews = data["data"]["repository"]["pullRequest"]["reviewRequests"]["nodes"]["requestedReviewer"]["login"]
-            if reviews:
-                most_recent_reviewer = reviews[0]["login"]
-                return most_recent_reviewer
-            else:
-                return None
+            # Access the first node in the list
+            review_request_node = data["data"]["repository"]["pullRequest"]["reviewRequests"]["nodes"]
+            if review_request_node:
+                # Get the requestedReviewer object
+                requested_reviewer = review_request_node[0]["requestedReviewer"]
+                if "login" in requested_reviewer:
+                    return requested_reviewer["login"]  # User's login
+                elif "name" in requested_reviewer:
+                    return requested_reviewer["name"]  # Team's name
+            return None
         except (KeyError, TypeError):
             raise Exception("Unexpected response format or missing data: ", response.json())
 
