@@ -151,7 +151,7 @@ def analyze_commit_files(github_client, openai_client, pr_id, commit, language, 
     review = openai_client.generate_response(create_review_prompt(combined_content,
                                                                   language,
                                                                   custom_prompt))
-    github_client.post_comment(pr_id, f"ChatGPT's code review:\n {review}")
+    github_client.post_comment(pr_id, f"ChatGPT model {env_vars['OPENAI_MODEL']} code review:\n {review}")
 
 def analyze_patch(github_client, openai_client, pr_id, patch_content, language, custom_prompt):
     """
