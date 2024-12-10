@@ -19,6 +19,6 @@ jobs:
           openai_model: 'gpt-4o'
           openai_temperature: 0.5
           openai_max_tokens: 2048
-          mode: patch # files or patch
+          mode: files # files or patch
           language: en # optional, default is 'en'
           custom_prompt: "" # optional
