@@ -5,7 +5,7 @@ The GithubClient class can be used to retrieve information about users, commits,
 
 import os
 import logging
-# import requests
+import requests
 from github import Github
 
 
