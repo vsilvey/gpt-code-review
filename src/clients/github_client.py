@@ -159,16 +159,17 @@ class GithubClient:
 
     def get_most_recent_reviewer(self, pr_id):
         """
-        Fetches the most recently assigned reviewer for a specific pull request,
-        iterating through all paginated results and filtering by 'review_requested' event type.
+        Using GraphQL, fetches the most recently assigned reviewer for a specific pull request.
+        Next, upon finding a requested_reviewer, the login of the request_reviewer is passed back to the calling
+        function for further evaluation.
 
         Args:
-            owner (str): The pull request owner.
             pr_id (int): The pull request number.
 
         Returns:
-            str: The username of the most recently assigned reviewer, or None if no reviewer was assigned.
+            str: The login/username of the most recently assigned reviewer, or None if no reviewer was assigned.
         """
+
         url = "https://api.github.com/graphql"
         headers = {
             'Authorization': f"token {os.getenv('GH_TOKEN')}",
@@ -203,10 +204,10 @@ class GithubClient:
         response = requests.post(url, json={"query": query, "variables": variables}, headers=headers)
 
         if response.status_code != 200:
-            raise Exception(f"GraphQL query failed with status code {response.status_code}: {response.text}")
+            raise Exception(f"GraphQL query failed with status code: {response.status_code}: {response.text}")
 
         data = response.json()
-        logging.info("The content of the response is %s", data)
+
         try:
             # Access the first node in the list
             review_request_node = data["data"]["repository"]["pullRequest"]["reviewRequests"]["nodes"]
@@ -218,8 +219,9 @@ class GithubClient:
                 elif "name" in requested_reviewer:
                     return requested_reviewer["name"]  # Team's name
             return None
-        except (KeyError, TypeError):
-            raise Exception("Unexpected response format or missing data: ", response.json())
+        except Exception as e:
+            logging.error("Unexpected response format or missing data: %s", response.json(), e)
+            raise
 
     def get_pr_owner(self, pr_id):
         """
