@@ -241,6 +241,5 @@ def create_review_prompt(content, language, custom_prompt=None):
         f"   ```"
     )
 
-
 if __name__ == "__main__":
     main()
