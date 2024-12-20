@@ -170,10 +170,11 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
 
     combined_diff = ""
 
+    logging.info("patch content: %s", patch_content.split("diff"))
     for diff_text in patch_content.split("diff"):
         if diff_text:
             try:
-                logging.info("split text is %s: ", diff_text)
+                #logging.info("split text is %s: ", diff_text)
                 file_name = diff_text.split("b/")[1].splitlines()[0]
                 logging.info("Processing diff for file: %s", file_name)
                 combined_diff += f"\n### File: {file_name}\n```diff\n{diff_text}```\n"
@@ -181,7 +182,7 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
                 logging.error("Error processing diff for file: %s: %s", file_name, str(e))
                 github_client.post_comment(
                     pr_id,
-                    f"ChatGPT was unable to process the response about {file_name}: {str(e)}"
+                    f"ChatGPT was unable to process the response for {file_name}: {str(e)}"
                 )
 
     review_prompt = create_review_prompt(combined_diff, language, custom_prompt)
