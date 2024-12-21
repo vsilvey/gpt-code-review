@@ -163,7 +163,7 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
         language (str): The language for the review.
         custom_prompt (str, optional): Custom prompt for the code review.
     """
-    logging.info("Analyzing patch content for PR ID: %s", pr_id)
+    logging.info("Analyzing patch contents for PR ID: %s", pr_id)
 
     combined_diff = ""
     for diff_text in patch_content.split("diff"):
