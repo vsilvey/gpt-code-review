@@ -166,13 +166,16 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
         language (str): The language for the review.
         custom_prompt (str, optional): Custom prompt for the code review.
     """
+    index_no = 0
     logging.info("Analyzing patch content for PR ID: %s", pr_id)
 
     combined_diff = ""
 
-    logging.info("patch content: %s", patch_content.split("diff"))
+    logging.info("patch content length is: %s", len(patch_content.split("diff")))
+
     for diff_text in patch_content.split("diff"):
         if diff_text:
+            logging.info("list item number is %s", index_no +=1 )
             try:
                 #logging.info("split text is %s: ", diff_text)
                 file_name = diff_text.split("b/")[1].splitlines()[0]
