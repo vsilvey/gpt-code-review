@@ -175,7 +175,8 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
 
     for diff_text in patch_content.split("diff"):
         if diff_text:
-            logging.info("list item number is %s", index_no +=1 )
+            index_no += 1
+            logging.info("list item number is %s", index_no )
             try:
                 #logging.info("split text is %s: ", diff_text)
                 file_name = diff_text.split("b/")[1].splitlines()[0]
