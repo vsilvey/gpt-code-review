@@ -1,5 +1,5 @@
 """
-This module contains the GithubClient class, which is used to interact with the Github API. 
+This module contains the GithubClient class, which is used to interact with the GitHub API.
 The GithubClient class can be used to retrieve information about users, commits, content of pull requests files and patches.
 """
 
