@@ -12,7 +12,7 @@ inputs:
   github_pr_id:  # id of input
     description: 'Github PR ID'
     required: true
-    default: ''
+    default: '2'
   github_reviewer: 
     description: 'PR reviewer that was requested'
     required: true
