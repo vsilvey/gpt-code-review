@@ -170,15 +170,15 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
 
     combined_chgs = ""
 
-    for diff_text in patch_content.split("diff"):
-        if diff_text:
+    for chgs_text in patch_content.split("diff"):
+        if chgs_text:
             try:
-                logging.info("split text is %s: ", diff_text)
-                file_name = diff_text.split("b/")[1].splitlines()[0]
-                logging.info("Processing diff for file: %s", file_name)
-                combined_chgs += f"\n### File: {file_name}\n```diff\n{diff_text}```\n"
+                logging.info("split text is %s: ", chgs_text)
+                file_name = chgs_text.split("b/")[1].splitlines()[0]
+                logging.info("Processing changes for file: %s", file_name)
+                combined_chgs += f"\n### File: {file_name}\n```diff\n{chgs_text}```\n"
             except (TypeError, ValueError) as e:
-                logging.error("Error processing diff for file: %s: %s", file_name, str(e))
+                logging.error("Error processing changes for file: %s: %s", file_name, str(e))
                 github_client.post_comment(
                     pr_id,
                     f"ChatGPT was unable to process the response for {file_name}: {str(e)}"
