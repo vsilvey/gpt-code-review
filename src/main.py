@@ -176,7 +176,7 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
                 logging.info("split text is %s: ", chgs_text)
                 file_name = chgs_text.split("b/")[1].splitlines()[0]
                 logging.info("Processing changes for file: %s", file_name)
-                combined_chgs += f"\n### File: {file_name}\n```diff\n{chgs_text}```\n"
+                combined_chgs += f"\n### File: {file_name}\n```chgs\n{chgs_text}```\n"
             except (TypeError, ValueError) as e:
                 logging.error("Error processing changes for file: %s: %s", file_name, str(e))
                 github_client.post_comment(
