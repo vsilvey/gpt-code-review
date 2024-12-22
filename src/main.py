@@ -38,7 +38,7 @@ def main():
         if env_vars['MODE'] == "files":
             process_files(github_client, openai_client, pr_id, language, custom_prompt, oai_model)
         elif env_vars['MODE'] == "patch":
-            process_patch(github_client, openai_client, pr_id, language, custom_prompt, oai_model)
+            process_patch(github_client, openai_client, pr_id, language, custom_prompt)
         else:
             logging.error("Invalid mode. Choose either 'files' or 'patch'.")
     else:

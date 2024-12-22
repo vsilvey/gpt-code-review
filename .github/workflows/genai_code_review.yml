@@ -16,6 +16,6 @@ jobs:
           github_token: ${{ secrets.GH_TOKEN }}
           github_pr_id: 2 #${{ github.event.pull_request.number }}
           github_reviewer: 'sonargptreviewer' #${{ github.event.review.requested_reviewer.login }}
-          openai_model: 'o1-mini'#'gpt-4o' is the other option
+          openai_model: 'o1-mini'#'gpt-4o'
           openai_temperature: 1 #default value accepted by 'o1-mini'
           openai_max_tokens: 5000
