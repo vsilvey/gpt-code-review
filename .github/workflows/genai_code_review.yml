@@ -18,4 +18,4 @@ jobs:
           github_reviewer: 'sonargptreviewer' #${{ github.event.review.requested_reviewer.login }}
           openai_model: 'o1-mini'#'gpt-4o' is the other option
           openai_temperature: 1 #default value accepted by 'o1-mini'
-          openai_max_tokens: 2048
+          openai_max_tokens: 5000
