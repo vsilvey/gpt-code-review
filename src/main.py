@@ -36,9 +36,9 @@ def main():
         language = env_vars.get('LANGUAGE', 'en')
         custom_prompt = env_vars.get('CUSTOM_PROMPT')
         if env_vars['MODE'] == "files":
-            process_files(github_client, openai_client, pr_id, language, custom_prompt)
+            process_files(github_client, openai_client, pr_id, language, custom_prompt, oai_model)
         elif env_vars['MODE'] == "patch":
-            process_patch(github_client, openai_client, pr_id, language, custom_prompt)
+            process_patch(github_client, openai_client, pr_id, language, custom_prompt, oai_model)
         else:
             logging.error("Invalid mode. Choose either 'files' or 'patch'.")
     else:
@@ -87,7 +87,7 @@ def get_env_vars():
 
     return env_vars
 
-def process_files(github_client, openai_client, pr_id, language, custom_prompt):
+def process_files(github_client, openai_client, pr_id, language, custom_prompt, oai_model):
     """
     Process the files changed in the last commit of the pull request.
 
@@ -97,6 +97,7 @@ def process_files(github_client, openai_client, pr_id, language, custom_prompt):
         pr_id (int): The pull request ID.
         language (str): The language for the review.
         custom_prompt (str, optional): Custom prompt for the code review.
+        oai_model (str): The OpenAI model being leveraged for the review.
     """
     logging.info("Processing files for PR ID: %s", pr_id)
     pull_request = github_client.get_pr(pr_id)
@@ -107,7 +108,7 @@ def process_files(github_client, openai_client, pr_id, language, custom_prompt):
         return
 
     last_commit = commits[-1]
-    analyze_commit_files(github_client, openai_client, pr_id, last_commit, language, custom_prompt)
+    analyze_commit_files(github_client, openai_client, pr_id, last_commit, language, custom_prompt, oai_model)
 
 def process_patch(github_client, openai_client, pr_id, language, custom_prompt):
     """
@@ -128,7 +129,7 @@ def process_patch(github_client, openai_client, pr_id, language, custom_prompt):
         return
     analyze_patch(github_client, openai_client, pr_id, patch_content, language, custom_prompt)
 
-def analyze_commit_files(github_client, openai_client, pr_id, commit, language, custom_prompt):
+def analyze_commit_files(github_client, openai_client, pr_id, commit, language, custom_prompt, oai_model):
     """
     Analyze all files in a given commit together and post a single comment.
 
@@ -139,6 +140,7 @@ def analyze_commit_files(github_client, openai_client, pr_id, commit, language, 
         commit (Commit): The commit objects.
         language (str): The language for the review.
         custom_prompt (str, optional): Custom prompt for the code review.
+        oai_model (str): The OpenAI model being leveraged for the review.
     """
     logging.info("Analyzing files in commit: %s", commit.sha)
     files = github_client.get_commit_files(commit)
@@ -155,7 +157,7 @@ def analyze_commit_files(github_client, openai_client, pr_id, commit, language, 
 
     github_client.post_comment(pr_id, f"ChatGPT version {oai_model} code review:\n {review}")
 
-def analyze_patch(github_client, openai_client, pr_id, patch_content, language, custom_prompt):
+def analyze_patch(github_client, openai_client, pr_id, patch_content, language, custom_prompt, oai_model):
     """
     Analyze the patch content of a pull request and post a single comment.
 
@@ -166,6 +168,7 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
         patch_content (str): The patch content.
         language (str): The language for the review.
         custom_prompt (str, optional): Custom prompt for the code review.
+        oai_model (str): The OpenAI model being leveraged for the review.
     """
     logging.info("Analyzing patch content for PR ID: %s", pr_id)
 
