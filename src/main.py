@@ -27,6 +27,7 @@ def main():
 
     pr_id = env_vars['GITHUB_PR_ID']
     reviewer = env_vars.get('GITHUB_REVIEWER', '').strip()
+    oai_model = env_vars['OPENAI_MODEL']
 
 # Proceed with code review if reviewer matches most recently requested reviewer.
 
@@ -152,7 +153,7 @@ def analyze_commit_files(github_client, openai_client, pr_id, commit, language, 
                                                                   language,
                                                                   custom_prompt))
 
-    github_client.post_comment(pr_id, f"ChatGPT version {env_vars['OPENAI_MODEL']} code review:\n {review}")
+    github_client.post_comment(pr_id, f"ChatGPT version code review:\n {review}")
 
 def analyze_patch(github_client, openai_client, pr_id, patch_content, language, custom_prompt):
     """
@@ -186,7 +187,7 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
 
     review_prompt = create_review_prompt(combined_chgs, language, custom_prompt)
     summary = openai_client.generate_response(review_prompt)
-    github_client.post_comment(pr_id, f"ChatGPT code review:\n {review}")
+    github_client.post_comment(pr_id, f"ChatGPT code model version {oai_model} review:\n {review}")
 
 def create_review_prompt(content, language, custom_prompt=None):
     """
