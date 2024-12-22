@@ -42,7 +42,10 @@ class OpenAIClient:
 
     def generate_response(self, prompt):
         """
-        Generate a response from the OpenAI model based on the given prompt.
+        Generate a response from the OpenAI model based on the given prompt. Keep in mind that the parameter
+        values in 'messages=' may vary based on the model you use. For example, currently model 'o1-mini'
+        does not have a "system" role, so it had to be changed to "user" in order to leverage model 'o1-mini'
+        instead of 'gpt-4o'.
 
         Args:
             prompt (str): The prompt to send to the OpenAI API.
@@ -62,7 +65,7 @@ class OpenAIClient:
                     {"role": "user", "content": prompt}
                 ],
                 temperature=self.temperature,
-                max_completion_tokens=self.max_completion_tokens #
+                max_completion_tokens=self.max_completion_tokens
             )
             logging.info("Response generated successfully.")
             return response.choices[0].message.content
