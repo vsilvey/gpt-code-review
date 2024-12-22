@@ -58,7 +58,7 @@ class OpenAIClient:
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "You are an expert Developer."},
+                    {"role": "user", "content": "You are an expert Developer."},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=self.temperature,
