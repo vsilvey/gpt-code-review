@@ -65,6 +65,7 @@ class OpenAIClient:
                 max_completion_tokens=self.max_completion_tokens #
             )
             logging.info("Response generated successfully.")
+            logging.info("Response is: %s", response.choices[0])
             return response.choices[0].message.content
         except Exception as e:
             logging.error("Error generating response from OpenAI model: %s", e)
