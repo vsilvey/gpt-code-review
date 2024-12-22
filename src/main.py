@@ -136,7 +136,7 @@ def analyze_commit_files(github_client, openai_client, pr_id, commit, language, 
         github_client (GithubClient): The GitHub client instance.
         openai_client (OpenAIClient): The OpenAI client instance.
         pr_id (int): The pull request ID.
-        commit (Commit): The commit object.
+        commit (Commit): The commit objects.
         language (str): The language for the review.
         custom_prompt (str, optional): Custom prompt for the code review.
     """
