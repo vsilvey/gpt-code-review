@@ -62,7 +62,7 @@ class OpenAIClient:
                     {"role": "user", "content": prompt}
                 ],
                 temperature=self.temperature,
-                max_completion_tokens=self.max_completion_tokens
+                max_completion_tokens=self.max_completion_tokens #
             )
             logging.info("Response generated successfully.")
             return response.choices[0].message.content
