@@ -231,7 +231,7 @@ def create_review_prompt(content, language, custom_prompt=None):
         f"Identify any areas for improvement, suggest specific optimizations, and note potential bugs or security vulnerabilities. "
         f"Additionally, provide suggestions for how to address the identified issues, with a focus on maintainability and scalability. "
         f"Include examples of code where relevant. Use markdown formatting for your response:\n\n"
-        f"Keep your responses within the defined max token limit, ensuring you summarize as necessary to stay within the limit."
+        f"Keep your responses within the defined max token limit of 5000, ensuring you summarize as necessary to stay within the limit."
         f"Make it clear that you summarized to stay within the max token limit."
         f"Write this code review in the following {language}:\n\n"
         f"Do not write the code or guidelines in the review. Only write the review itself.\n\n"
