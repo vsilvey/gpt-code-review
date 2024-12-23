@@ -62,7 +62,7 @@ class OpenAIClient:
                 ],
                 temperature=self.temperature,
                 max_completion_tokens=self.max_completion_tokens,
-                stream=stream
+                stream=True
             )
 
             if stream:
