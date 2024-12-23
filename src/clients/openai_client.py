@@ -35,7 +35,7 @@ class OpenAIClient:
             logging.error("Error initializing OpenAI client: %s", e)
             raise
 
-    def generate_response(self, prompt, stream=True):
+    def generate_response(self, prompt, stream=False):
         """
         Generate a response from the OpenAI model based on the given prompt.
 
