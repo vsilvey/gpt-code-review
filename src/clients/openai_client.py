@@ -14,7 +14,7 @@ class OpenAIClient:
     A client for interacting with the OpenAI API to generate responses using a specified model.
     """
 
-    def __init__(self, model, temperature, max_tokens):
+    def __init__(self, model, temperature, max_completion_tokens):
         """
         Initialize the OpenAIClient with API key, model, temperature, and max tokens.
 
@@ -22,19 +22,19 @@ class OpenAIClient:
             api_key (str): The OpenAI API key.
             model (str): The OpenAI model to use.
             temperature (float): The sampling temperature.
-            max_tokens (int): The maximum number of tokens to generate.
+            max_completion_tokens (int): The maximum number of tokens to generate.
         """
         try:
             self.client = OpenAI()
             self.model = model
             self.temperature = temperature
-            self.max_tokens = max_tokens
+            self.max_completion_tokens = max_completion_tokens
             logging.info(
                 "OpenAI client initialized successfully, "
                 "Model: %s, temperature: %s, max tokens: %s",
                 self.model,
                 self.temperature,
-                self.max_tokens
+                self.max_completion_tokens
             )
         except Exception as e:
             logging.error("Error initializing OpenAI client: %s", e)
@@ -42,7 +42,10 @@ class OpenAIClient:
 
     def generate_response(self, prompt):
         """
-        Generate a response from the OpenAI model based on the given prompt.
+        Generate a response from the OpenAI model based on the given prompt. Keep in mind that the parameter
+        values in 'messages=' may vary based on the model you use. For example, currently model 'o1-mini'
+        does not have a "system" role, so it had to be changed to "user" in order to leverage model 'o1-mini'
+        instead of 'gpt-4o'.
 
         Args:
             prompt (str): The prompt to send to the OpenAI API.
@@ -58,11 +61,11 @@ class OpenAIClient:
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "You are an expert Developer."},
+                    {"role": "user", "content": "You are an expert Developer."},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=self.temperature,
-                max_tokens=self.max_tokens
+                max_completion_tokens=self.max_completion_tokens
             )
             logging.info("Response generated successfully.")
             return response.choices[0].message.content
