@@ -14,7 +14,6 @@ class OpenAIClient:
         Initialize the OpenAIClient with API key, model, temperature, and max tokens.
 
         Args:
-            api_key (str): The OpenAI API key.
             model (str): The OpenAI model to use.
             temperature (float): The sampling temperature.
             max_completion_tokens (int): The maximum number of tokens to generate.
