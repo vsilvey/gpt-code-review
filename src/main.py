@@ -207,7 +207,7 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
     review = openai_client.generate_response(review_prompt)
     github_client.post_comment(pr_id, f"ChatGPT model: {oai_model}\n mode: {mode}\n temperature: {oai_temp}\n {review}")
 
-def create_review_prompt(content, language, custom_prompt=None, max_tokens):
+def create_review_prompt(content, language, max_tokens, custom_prompt=None):
     """
     Create a review prompt for the OpenAI API.
 
