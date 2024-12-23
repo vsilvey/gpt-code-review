@@ -175,11 +175,10 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
 
     combined_chgs = ""
 
-    logging.info("patch content is: %s", patch_content)
+    logging.info("patch content is: %s", patch_content) #for troubleshooting, to remove later
     for chgs_text in patch_content.split(" diff "):
         if chgs_text:
             try:
-                logging.info("split text is %s: ", chgs_text)
                 file_name = chgs_text.split("b/")[1].splitlines()[0]
                 logging.info("Processing changes for file: %s", file_name)
                 combined_chgs += f"\n### File: {file_name}\n```chgs\n{chgs_text}```\n"
@@ -191,7 +190,7 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
                 )
 
     review_prompt = create_review_prompt(combined_chgs, language, custom_prompt)
-    review = openai_client.generate_response(review_prompt)
+    review = openai_client.generate_response(review_prompt,stream=True)
     github_client.post_comment(pr_id, f"ChatGPT version {oai_model}:\n {review}")
 
 def create_review_prompt(content, language, custom_prompt=None):
