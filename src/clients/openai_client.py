@@ -50,7 +50,7 @@ class OpenAIClient:
             Exception: If there is an error generating the response.
         """
         try:
-            logging.info("Generating response from OpenAI model with streaming=%s.", stream)
+            logging.info("Generating response from OpenAI model with streaming %s.", stream)
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[

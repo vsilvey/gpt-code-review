@@ -174,11 +174,10 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
     logging.info("Analyzing patch content for PR ID: %s", pr_id)
 
     combined_chgs = ""
-    logging.info("patch content is: %s", patch_content)
+    logging.info("patch content is: %s", patch_content) #for troubleshooting, to remove later
     for chgs_text in patch_content.split(" diff "):
         if chgs_text:
             try:
-                logging.info("split text is %s: ", chgs_text)
                 file_name = chgs_text.split("b/")[1].splitlines()[0]
                 logging.info("Processing changes for file: %s", file_name)
                 combined_chgs += f"\n### File: {file_name}\n```chgs\n{chgs_text}```\n"
