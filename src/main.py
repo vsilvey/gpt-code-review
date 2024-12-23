@@ -190,7 +190,7 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
                 )
 
     review_prompt = create_review_prompt(combined_chgs, language, custom_prompt)
-    review = openai_client.generate_response(review_prompt,stream=True)
+    review = openai_client.generate_response(review_prompt)
     github_client.post_comment(pr_id, f"ChatGPT version {oai_model}:\n {review}")
 
 def create_review_prompt(content, language, custom_prompt=None):
