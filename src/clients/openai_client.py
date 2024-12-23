@@ -1,8 +1,3 @@
-"""
-This module contains the OpenAIClient class, which is used to interact with the OpenAI API. 
-The OpenAIClient class can be used to generate responses from a specified OpenAI model.
-"""
-
 import logging
 from openai import OpenAI
 
@@ -40,24 +35,23 @@ class OpenAIClient:
             logging.error("Error initializing OpenAI client: %s", e)
             raise
 
-    def generate_response(self, prompt):
+    def generate_response(self, prompt, stream=True):
         """
-        Generate a response from the OpenAI model based on the given prompt. Keep in mind that the parameter
-        values in 'messages=' may vary based on the model you use. For example, currently model 'o1-mini'
-        does not have a "system" role, so it had to be changed to "user" in order to leverage model 'o1-mini'
-        instead of 'gpt-4o'.
+        Generate a response from the OpenAI model based on the given prompt.
 
         Args:
             prompt (str): The prompt to send to the OpenAI API.
+            stream (bool): If True, streams the tokens as they are generated.
 
         Returns:
-            str: The generated response from the OpenAI model.
+            str or generator: If `stream` is False, returns the generated response as a string.
+                              If `stream` is True, yields tokens as they are generated.
 
         Raises:
             Exception: If there is an error generating the response.
         """
         try:
-            logging.info("Generating response from OpenAI model.")
+            logging.info("Generating response from OpenAI model with streaming=%s.", stream)
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
@@ -65,10 +59,19 @@ class OpenAIClient:
                     {"role": "user", "content": prompt}
                 ],
                 temperature=self.temperature,
-                max_completion_tokens=self.max_completion_tokens
+                max_completion_tokens=self.max_completion_tokens,
+                stream=stream
             )
-            logging.info("Response generated successfully.")
-            return response.choices[0].message.content
+
+            if stream:
+                # Stream tokens as they are generated
+                for chunk in response:
+                    if "choices" in chunk and len(chunk["choices"]) > 0:
+                        yield chunk["choices"][0]["delta"].get("content", "")
+            else:
+                # Return the complete response as a single string
+                logging.info("Response generated successfully.")
+                return response.choices[0].message.content
         except Exception as e:
             logging.error("Error generating response from OpenAI model: %s", e)
             raise
