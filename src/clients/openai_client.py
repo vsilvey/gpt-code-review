@@ -35,7 +35,7 @@ class OpenAIClient:
             logging.error("Error initializing OpenAI client: %s", e)
             raise
 
-    def generate_response(self, prompt, stream=False):
+    def generate_response(self, prompt, stream=True):
         """
         Generate a response from the OpenAI model based on the given prompt.
 
@@ -66,6 +66,7 @@ class OpenAIClient:
             if stream:
                 # Stream tokens as they are generated
                 for chunk in response:
+                    logging.info("chunk of response is %s", chunk)
                     if "choices" in chunk and len(chunk["choices"]) > 0:
                         yield chunk["choices"][0]["delta"].get("content", "")
             else:
