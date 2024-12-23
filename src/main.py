@@ -30,6 +30,7 @@ def main():
     oai_model = env_vars['OPENAI_MODEL']
     oai_temp = env_vars['OPENAI_TEMPERATURE']
     mode = env_vars['MODE']
+    max_tokens = env_vars['OPENAI_MAX_TOKENS']
 
 
 # Proceed with code review if reviewer matches most recently requested reviewer.
@@ -206,7 +207,7 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
     review = openai_client.generate_response(review_prompt)
     github_client.post_comment(pr_id, f"ChatGPT model: {oai_model}\n mode: {mode}\n temperature: {oai_temp}\n {review}")
 
-def create_review_prompt(content, language, custom_prompt=None):
+def create_review_prompt(content, language, custom_prompt=None, max_tokens):
     """
     Create a review prompt for the OpenAI API.
 
@@ -214,6 +215,7 @@ def create_review_prompt(content, language, custom_prompt=None):
         content (str): The content of the code to be reviewed.
         language (str): The language for the review.
         custom_prompt (str, optional): Custom prompt for the code review.
+        max_tokens (str): Max number of tokens returnable
 
     Returns:
         str: The review prompt.
@@ -231,7 +233,7 @@ def create_review_prompt(content, language, custom_prompt=None):
         f"Identify any areas for improvement, suggest specific optimizations, and note potential bugs or security vulnerabilities. "
         f"Additionally, provide suggestions for how to address the identified issues, with a focus on maintainability and scalability. "
         f"Include examples of code where relevant. Use markdown formatting for your response:\n\n"
-        f"Keep your responses within the defined max token limit of 5000, ensuring you summarize as necessary to stay within the limit."
+        f"Keep your responses within the defined max token limit of {max_tokens}, ensuring you summarize as necessary to stay within the limit."
         f"Make it clear when you summarized to stay within the max token limit and indicate the number of tokens used for the review."
         f"Write this code review in the following {language}:\n\n"
         f"Do not write the code or guidelines in the review. Only write the review itself.\n\n"
