@@ -166,7 +166,7 @@ def analyze_commit_files(github_client, openai_client, pr_id, commit, language, 
                                                                   language,
                                                                   custom_prompt))
 
-    github_client.post_comment(pr_id, f"ChatGPT model {oai_model}\n mode: {mode}\n temp: {oai_temp}\n {review}")
+    github_client.post_comment(pr_id, f"ChatGPT model: {oai_model}\n mode: {mode}\n temperature: {oai_temp}\n {review}")
 
 def analyze_patch(github_client, openai_client, pr_id, patch_content, language, custom_prompt, oai_model, mode, oai_temp):
     """
@@ -204,7 +204,7 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
 
     review_prompt = create_review_prompt(combined_chgs, language, custom_prompt)
     review = openai_client.generate_response(review_prompt)
-    github_client.post_comment(pr_id, f"ChatGPT model {oai_model}\n mode: {mode}\n temp: {oai_temp}\n {review}")
+    github_client.post_comment(pr_id, f"ChatGPT model: {oai_model}\n mode: {mode}\n temperature: {oai_temp}\n {review}")
 
 def create_review_prompt(content, language, custom_prompt=None):
     """
