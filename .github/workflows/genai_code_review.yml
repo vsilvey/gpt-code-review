@@ -14,7 +14,7 @@ jobs:
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           github_token: ${{ secrets.GH_TOKEN }}
-          github_pr_id: 2 #${{ github.event.pull_request.number }}
+          github_pr_id: 7 #${{ github.event.pull_request.number }}
           github_reviewer: 'sonargptreviewer' #${{ github.event.review.requested_reviewer.login }}
           openai_model: 'o1-mini'
           openai_temperature: 1 #default value accepted by 'o1-mini'
