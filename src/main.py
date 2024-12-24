@@ -220,7 +220,7 @@ def create_review_prompt(content, language, custom_prompt=None):
     try:
         max_tokens = get_env_variable('OPENAI_MAX_TOKENS')
     except ValueError as e:
-        logging.error("Environment variable error: %s", e)
+        logging.error("Environment variables error: %s", e)
         return
 
     if custom_prompt:
