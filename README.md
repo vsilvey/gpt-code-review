@@ -1,7 +1,7 @@
 
-# Automated Code Review with OpenAI and GitHub Actions
+# Automated Code Review Assistance with OpenAI and GitHub Actions
 
-This project automates code reviews for pull requests using OpenAI's GPT models. It integrates seamlessly with GitHub Actions to provide detailed, AI-powered feedback on code changes directly in the pull request.
+This project automates code reviews using the GPT language model. It integrates with Github Actions so that when a PR is requested, if the assigned reviewer is "arovygptassistant", each code change made will be sent to GPT for review. GPT review comments will be posted as normal comments within the PR. Assignment of "arovygptassistant" is optional and this reviewer does not have the capability to approve or reject PRs.
 
 ---
 
