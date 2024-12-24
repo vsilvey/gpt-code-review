@@ -55,8 +55,8 @@ jobs:
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           github_token: ${{ secrets.GH_TOKEN }}
-          github_pr_id: 7 # ${{ github.event.pull_request.number }}
-          github_reviewer: 'sonargptreviewer' # purposely hardcoded to trigger review when this reviewer is assigned
+          github_pr_id: ${{ github.event.pull_request.number }}
+          github_reviewer: 'arovygptassistant' # purposely hardcoded to trigger review when this reviewer is assigned
           openai_model: 'o1-mini' # 'o1-mini' is optimized for code reviews
           openai_temperature: 1 # default value accepted by 'o1-mini' model
           openai_max_tokens: 3000
@@ -88,8 +88,9 @@ The action leverages OpenAI and GitHub APIs to perform the following steps:
 
 1. Authenticates with OpenAI using the provided API key and with GitHub using the `GITHUB_TOKEN`.
 2. Identifies the pull request and the files or patches changed.
-3. Submits these changes to OpenAI's GPT model for review.
-4. Posts the AI-generated feedback as comments on the pull request.
+3. Determines wether or not the assigned reviewer is "arovygptassistant" 
+4. Submits the changes to OpenAI's GPT model for review.
+5. Posts the AI-generated feedback as comments on the pull request.
 
 ---
 
@@ -147,7 +148,7 @@ For additional details, refer to [OpenAI's Privacy Policy](https://openai.com/pr
     - Created the original process
     
 - **Vince Silvey(Contributor)** - [vsilvey](https://github.com/vsilvey)
-    - Altered the process to allow for the GPT review to be optionally triggered upon assignment of a specific reviewer instead of automatically generating a review as a pull request is opened. Also changed the process to leverage the '1o-mini' model, providing the most advanced code review capability. Finally, updated packages in requirements.txt so the most current are used.
+    - Altered the process to allow for the GPT review to be optionally triggered upon assignment of a specific reviewer instead of automatically generating a review as a pull request is opened or altered. Also changed the process to leverage the '1o-mini' model, providing the most advanced code review capability. Finally, updated packages in requirements.txt so the most current are used.
 
 ---
 
