@@ -41,29 +41,28 @@ Create a workflow file in your repository under `.github/workflows/code-review.y
 ```yaml
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [review_requested]
 
 jobs:
-  code_review:
+  genai_code_review:
     runs-on: ubuntu-latest
-    name: Automated Code Review
+    name: GPT Code Review
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Run OpenAI Code Review
-        uses: your-org/your-action-name@v1
+      - name: GPT Code Review
+        uses: vsilvey/gpt-code-review@master
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          github_pr_id: ${{ github.event.pull_request.number }}
-          github_reviewer: "sonargptreviewer"  # Specify reviewer name
-          openai_model: "gpt-4"               # Optional: Model to use
-          openai_temperature: 0.7             # Optional: Creativity level
-          openai_max_tokens: 2048             # Optional: Max tokens for response
-          mode: patch                         # 'files' or 'patch'
-          language: en                        # Language for the review
-          custom_prompt: ""                   # Optional: Provide specific instructions for reviews
+          github_token: ${{ secrets.GH_TOKEN }}
+          github_pr_id: 7 # ${{ github.event.pull_request.number }}
+          github_reviewer: 'sonargptreviewer' # purposely hardcoded to trigger review when this reviewer is assigned
+          openai_model: 'o1-mini' # 'o1-mini' is optimized for code reviews
+          openai_temperature: 1 # default value accepted by 'o1-mini' model
+          openai_max_tokens: 3000
+          mode: patch # files (reviews any file in the pr with changes) or patch(reviews only the file changes)
+          language: en # optional, default is 'en'
+          custom_prompt: "" # optional
 ```
 
 This workflow triggers whenever a pull request is opened or updated, and the action uses the provided configurations to perform the review.
@@ -74,9 +73,9 @@ This workflow triggers whenever a pull request is opened or updated, and the act
 
 | Parameter            | Description                                                                                   | Default          | Options                    |
 |----------------------|-----------------------------------------------------------------------------------------------|------------------|----------------------------|
-| **openai_model**     | The OpenAI model used for reviews.                                                            | `gpt-4`          | Other models like `gpt-3.5-turbo` |
-| **openai_temperature** | Controls creativity of responses. Higher values are more creative, lower values more deterministic. | `0.5`            | Range: `0.0` to `1.0`      |
-| **openai_max_tokens** | The maximum token limit for responses.                                                       | `2048`           | Up to model's limit        |
+| **openai_model**     | The OpenAI model used for reviews.                                                            | `o1-mini`         | Other models like `gpt-4o` |
+| **openai_temperature** | Controls creativity of responses. Higher values are more creative, lower values more deterministic. | `1`            | Range: `0.0` to `1.0`      |
+| **openai_max_tokens** | The maximum token limit for responses.                                                       | `3000`           | Up to model's limit        |
 | **mode**             | The mode for reviewing code.                                                                 | `files`          | `files`, `patch`           |
 | **language**         | Language for the review comments.                                                            | `en`             | Any valid language code    |
 | **custom_prompt**    | Custom instructions for AI reviews.                                                          | `""`             | User-defined string        |
@@ -144,7 +143,11 @@ For additional details, refer to [OpenAI's Privacy Policy](https://openai.com/pr
 
 ## Authors and Contributors
 
-- **Your Name/Organization** - [GitHub Profile](https://github.com/your-profile)
+- **Rafael Cirolini** - [cirolini](https://github.com/cirolini)
+    - Created the original process
+    
+- **Vince Silvey(Contributor)** - [vsilvey](https://github.com/vsilvey)
+    - Altered the process to allow for the GPT review to be optionally triggered upon assignment of a specific reviewer instead of automatically generating a review as a pull request is opened. Also changed the process to leverage the '1o-mini' model, providing the most advanced code review capability. Finally, updated packages in requirements.txt so the most current are used.
 
 ---
 
