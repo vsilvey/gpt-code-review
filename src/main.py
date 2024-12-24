@@ -30,8 +30,6 @@ def main():
     oai_model = env_vars['OPENAI_MODEL']
     oai_temp = env_vars['OPENAI_TEMPERATURE']
     mode = env_vars['MODE']
-    max_tokens = env_vars['OPENAI_MAX_TOKENS']
-
 
 # Proceed with code review if reviewer matches most recently requested reviewer.
 
@@ -207,7 +205,7 @@ def analyze_patch(github_client, openai_client, pr_id, patch_content, language, 
     review = openai_client.generate_response(review_prompt)
     github_client.post_comment(pr_id, f"ChatGPT model: {oai_model}\n mode: {mode}\n temperature: {oai_temp}\n {review}")
 
-def create_review_prompt(content, language, max_tokens, custom_prompt=None):
+def create_review_prompt(content, language, custom_prompt=None):
     """
     Create a review prompt for the OpenAI API.
 
@@ -215,11 +213,16 @@ def create_review_prompt(content, language, max_tokens, custom_prompt=None):
         content (str): The content of the code to be reviewed.
         language (str): The language for the review.
         custom_prompt (str, optional): Custom prompt for the code review.
-        max_tokens (str): Max number of tokens returnable
 
     Returns:
         str: The review prompt.
     """
+    try:
+        max_tokens = get_env_variable('OPENAI_MAX_TOKENS')
+    except ValueError as e:
+        logging.error("Environment variable error: %s", e)
+        return
+
     if custom_prompt:
         logging.info("Using custom prompt: %s", custom_prompt)
         return (
@@ -228,6 +231,7 @@ def create_review_prompt(content, language, max_tokens, custom_prompt=None):
             f"```{content}```\n\n"
             f"Write this code review in the following {language}:\n\n"
         )
+
     return (
         f"You are now an expert code reviewer. Please review the following code for clarity, efficiency, and adherence to best practices. "
         f"Identify any areas for improvement, suggest specific optimizations, and note potential bugs or security vulnerabilities. "
