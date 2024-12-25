@@ -89,7 +89,7 @@ The action leverages OpenAI and GitHub APIs to perform the following steps:
 1. Authenticates with OpenAI using the provided API key and with GitHub using the `GITHUB_TOKEN`.
 2. Identifies the pull request and the files or patches changed.
 3. Determines wether or not the assigned reviewer is "arovygptassistant" 
-4. Submits the changes to OpenAI's GPT model for review.
+4. If so, submits the changes to OpenAI's GPT model for review.
 5. Posts the AI-generated feedback as comments on the pull request.
 
 ---
