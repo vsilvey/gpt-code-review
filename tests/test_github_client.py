@@ -84,7 +84,7 @@ class TestGithubClient(unittest.TestCase):
         patch_content = self.github_client.get_pr_patch(self.pr_id)
         expected_url = f"https://api.github.com/repos/{self.repo_name}/pulls/{self.pr_id}"
         mock_get.assert_called_with(expected_url, headers={
-            'Authorization': f"token fake_github_token",
+            'Authorization': f"token",
             'Accept': 'application/vnd.github.v3.diff'
         }, timeout=60)
         self.assertEqual(patch_content, "patch content")
