@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from clients.github_client import GithubClient
+from src.clients.github_client import GithubClient
 import os
 
 class TestGithubClient(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestGithubClient(unittest.TestCase):
         os.environ['GITHUB_REPOSITORY'] = self.repo_name
         os.environ['GITHUB_TOKEN'] = self.token
 
-        with patch('clients.github_client.Github') as MockGithub:
+        with patch('src.clients.github_client.Github') as MockGithub:
             self.mock_github = MockGithub.return_value
             self.mock_repo = self.mock_github.get_repo.return_value
             self.github_client = GithubClient(self.token)
@@ -74,7 +74,7 @@ class TestGithubClient(unittest.TestCase):
         self.mock_repo.get_contents.assert_called_with(self.filename, ref=self.commit_sha)
         self.assertEqual(content, "file content")
 
-    @patch('clients.github_client.requests.get')
+    @patch('src.clients.github_client.requests.get')
     def test_get_pr_patch(self, mock_get):
         mock_response = MagicMock()
         mock_response.text = "patch content"
