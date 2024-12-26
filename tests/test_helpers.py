@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 import logging
 
-from utils.helpers import get_env_variable
+from src.utils.helpers import get_env_variable
 
 class TestHelpers(unittest.TestCase):
 
