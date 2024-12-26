@@ -3,9 +3,9 @@ Main module for handling the code review process using ChatGPT and GitHub's API.
 """
 
 import logging
-from clients.github_client import GithubClient
-from clients.openai_client import OpenAIClient
-from utils.helpers import get_env_variable
+from src.clients.github_client import GithubClient
+from src.clients.openai_client import OpenAIClient
+from src.utils.helpers import get_env_variable
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -217,10 +217,9 @@ def create_review_prompt(content, language, custom_prompt=None):
     Returns:
         str: The review prompt.
     """
-    try:
-        max_tokens = get_env_variable('OPENAI_MAX_TOKENS')
-    except ValueError as e:
-        logging.warning("Unable to retrieve environment variable value for 'OPENAI_MAX_TOKENS': %s", e)
+    max_tokens = get_env_variable('OPENAI_MAX_TOKENS', False)
+    if not max_tokens:
+        max_tokens = 3000
 
     if custom_prompt:
         logging.info("Using custom prompt: %s", custom_prompt)
