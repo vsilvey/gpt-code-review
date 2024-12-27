@@ -14,10 +14,10 @@ jobs:
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           github_token: ${{ secrets.GH_TOKEN }}
-          github_pr_id: 14 # ${{ github.event.pull_request.number }}
-          github_reviewer: 'sonargptreviewer' # purposely hardcoded to trigger review when this reviewer is assigned
+          github_pr_id: ${{ github.event.pull_request.number }}
+          github_reviewer: 'arovygptassistant' # purposely hardcoded to trigger review when this reviewer is assigned
           openai_model: 'o1-mini' # 'o1-mini' is optimized for code reviews
-          openai_temperature: 1 # default value accepted by 'o1-mini' model
+          openai_temperature: 1 # default value accepted by 'o1-mini' ; typically ranges from 0 to 1
           openai_max_tokens: 3000
           mode: patch # files (reviews any file in the pr with changes) or patch(reviews only the file changes)
           language: en # optional, default is 'en'
