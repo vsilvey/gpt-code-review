@@ -24,11 +24,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: GPT Code Review
-        uses: vsilvey/gpt-code-review@master
+        uses: vsilvey/gpt-code-review@v1.0.0
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           github_token: ${{ secrets.GH_TOKEN }}
-          github_pr_id: ${{ github.event.pull_request.number }}
+          github_pr_id: 17 ${{ github.event.pull_request.number }}
           github_reviewer: 'arovygptassistant' # purposely hardcoded to trigger review when this reviewer is assigned
           openai_model: 'o1-mini' # 'o1-mini', released 12/4/24, is optimized for code reviews
           openai_temperature: 1 # default value accepted by 'o1-mini' ; typically ranges from 0 to 1
