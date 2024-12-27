@@ -1,3 +1,17 @@
+"""
+Summary:
+ This GitHub Actions workflow is triggered when a review is requested on a pull request.
+ It uses the GPT Code Review action to provide AI-driven code review feedback.
+ Steps:
+ - The repository code is checked out.
+ - The GPT Code Review action processes the pull request based on inputs like OpenAI API keys,
+   GitHub tokens, and model parameters.
+ Features:
+ - Dynamically sets pull request ID.
+ - Supports customizable reviewer, OpenAI model configurations, and review modes (files or patches).
+ - Designed to enhance code reviews with AI insights.
+"""
+
 on:
   pull_request:
     types: [review_requested]
@@ -16,9 +30,9 @@ jobs:
           github_token: ${{ secrets.GH_TOKEN }}
           github_pr_id: ${{ github.event.pull_request.number }}
           github_reviewer: 'arovygptassistant' # purposely hardcoded to trigger review when this reviewer is assigned
-          openai_model: 'o1-mini' # 'o1-mini' is optimized for code reviews
+          openai_model: 'o1-mini' # 'o1-mini', released 12/4/24, is optimized for code reviews
           openai_temperature: 1 # default value accepted by 'o1-mini' ; typically ranges from 0 to 1
           openai_max_tokens: 3000
-          mode: patch # files (reviews any file in the pr with changes) or patch(reviews only the file changes)
+          mode: patch #files (reviews any file in the pr with changes) or patch(reviews only the file changes)
           language: en # optional, default is 'en'
           custom_prompt: "" # optional
