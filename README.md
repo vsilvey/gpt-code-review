@@ -51,7 +51,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: GPT Code Review
-        uses: vsilvey/gpt-code-review@master
+        uses: vsilvey/gpt-code-review@v1.0.1
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           github_token: ${{ secrets.GH_TOKEN }}
