@@ -1,17 +1,14 @@
-"""
-Summary:
- This GitHub Actions workflow is triggered when a review is requested on a pull request.
- It uses the GPT Code Review action to provide AI-driven code review feedback.
- Steps:
- - The repository code is checked out.
- - The GPT Code Review action processes the pull request based on inputs like OpenAI API keys,
-   GitHub tokens, and model parameters.
- Features:
- - Dynamically sets pull request ID.
- - Supports customizable reviewer, OpenAI model configurations, and review modes (files or patches).
- - Designed to enhance code reviews with AI insights.
-"""
-
+# Summary:
+# This GitHub Actions workflow is triggered when a review is requested on a pull request.
+# It uses the GPT Code Review action to provide AI-driven code review feedback.
+# Steps:
+# - The repository code is checked out.
+# - The GPT Code Review action processes the pull request based on inputs like OpenAI API keys,
+#   GitHub tokens, and model parameters.
+# Features:
+# - Dynamically sets pull request ID.
+# - Supports customizable reviewer, OpenAI model configurations, and review modes (files or patches).
+# - Designed to enhance code reviews with AI insights.
 on:
   pull_request:
     types: [review_requested]
@@ -24,7 +21,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: GPT Code Review
-        uses: vsilvey/gpt-code-review@master
+        uses: vsilvey/gpt-code-review@v1.0.0
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           github_token: ${{ secrets.GH_TOKEN }}
