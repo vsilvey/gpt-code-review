@@ -16,4 +16,4 @@ ENV PYTHONPATH="${PYTHONPATH}:/github/workspace/src"
 
 # Set entry point and default command
 ENTRYPOINT ["python"]
-CMD ["src/main.py"]
+CMD ["/github/workspace/src/main.py"]
