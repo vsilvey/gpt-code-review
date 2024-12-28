@@ -2,7 +2,7 @@
 FROM python:3.12-slim
 
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /github/workspace
 
 # Copy dependency file and install dependencies
 COPY requirements.txt .
