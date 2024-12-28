@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Optionally add the src directory to PYTHONPATH (if needed for imports)
-ENV PYTHONPATH="${PYTHONPATH}:/app/src"
+ENV PYTHONPATH="${PYTHONPATH}:/github/workspace/src"
 
 # Set entry point and default command
 ENTRYPOINT ["python"]
